@@ -1,4 +1,4 @@
-# homebridge-xiaomi-air-purifier
+# homebridge-xiaomi-purifier
 
 This project is forked from [homebridge-mi-air-purifier](https://github.com/seikan/homebridge-mi-air-purifier.git).
 
@@ -35,7 +35,7 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 1. Install required packages.
 
    ```
-   npm install -g homebridge-mi-air-purifier miio
+   npm install -g homebridge-xiaomi-purifier miio
    ```
 
 2. Make sure your Homebridge server is same network with your air purifier, then run following command to discover the token.
