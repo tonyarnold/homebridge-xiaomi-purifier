@@ -166,7 +166,7 @@ MiAirPurifier.prototype = {
             .then(device => {
                 if (device.matches('type:air-purifier')) {
                     that.device = device;
-                    console.log('Discovered Mi Air Purifier (%s) at %s', device.miioModel, that.ip);
+                    log.debug('Discovered Mi Air Purifier (%s) at %s', device.miioModel, that.ip);
 
                     log.debug('Model       : ' + device.miioModel);
                     log.debug('Power       : ' + device.property('power'));
@@ -198,12 +198,12 @@ MiAirPurifier.prototype = {
                         device.on('relativeHumidityChanged', value => that.updateHumidity(value));
                     }
                 } else {
-                    console.log('Device discovered at %s is not Mi Air Purifier', this.ip);
+                    log.debug('Device discovered at %s is not Mi Air Purifier', this.ip);
                 }
             })
             .catch(err => {
-                console.log('Failed to discover Mi Air Purifier at %s', this.ip);
-                console.log('Will retry after 30 seconds');
+                log.debug('Failed to discover Mi Air Purifier at %s', this.ip);
+                log.debug('Will retry after 30 seconds');
                 setTimeout(function() {
                     that.discover();
                 }, 30000);
