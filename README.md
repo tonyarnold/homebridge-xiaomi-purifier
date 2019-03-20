@@ -28,6 +28,8 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 
 * Display air quality.
 
+* Display filter state.
+
 
 
 ### Installation
