@@ -1,16 +1,18 @@
 {
-  "name": "homebridge-mi-air-purifier",
-  "version": "1.4.0",
-  "description": "Xiaomi Mi air purifier plugin for Homebridge.",
+  "name": "homebridge-xiaomi-air-purifier",
+  "version": "1.4.1",
+  "description": "Xiaomi Mi air purifier plugin for Homebridge. Fork from https://github.com/seikan/homebridge-mi-air-purifier.git",
   "license": "MIT",
   "keywords": [
     "homebridge-plugin",
     "xiaomi",
-    "mi air purifier"
+    "mi air",
+    "air purifier",
+    "purifier"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/seikan/homebridge-mi-air-purifier.git"
+    "url": "https://github.com/clauzewitz/homebridge-xiaomi-air-purifier.git"
   },
   "engines": {
     "node": ">=0.12.0",

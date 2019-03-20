@@ -1,4 +1,7 @@
+'use strict';
+
 const miio = require('miio');
+const version = require('./package.json').version;
 let Service, Characteristic;
 let devices = [];
 
@@ -78,7 +81,9 @@ function MiAirPurifier(log, config) {
 
     this.serviceInfo
         .setCharacteristic(Characteristic.Manufacturer, 'Xiaomi')
-        .setCharacteristic(Characteristic.Model, 'Air Purifier');
+        .setCharacteristic(Characteristic.Model, 'Air Purifier')
+		.setCharacteristic(Characteristic.SerialNumber, this.token.toUpperCase())
+		.setCharacteristic(Characteristic.FirmwareRevision, version);
 
     this.services.push(this.service);
     this.services.push(this.serviceInfo);
