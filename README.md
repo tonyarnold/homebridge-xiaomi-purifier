@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/homebridge-xiaomi-purifier.svg)](https://badge.fury.io/js/homebridge-xiaomi-purifier)
+
 # homebridge-xiaomi-purifier
 
 This project is forked from [homebridge-mi-air-purifier](https://github.com/seikan/homebridge-mi-air-purifier.git).
