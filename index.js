@@ -51,6 +51,8 @@ function MiAirPurifier(log, config) {
     }
 
     this.service = new Service.AirPurifier(this.name);
+    this.service.addOptionalCharacteristic(Characteristic.FilterLifeLevel);
+    this.service.addOptionalCharacteristic(Characteristic.FilterChangeIndication);
 
     this.service
         .getCharacteristic(Characteristic.Active)
