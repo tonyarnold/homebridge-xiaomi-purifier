@@ -3,7 +3,6 @@
 const miio = require('miio');
 const version = require('./package.json').version;
 let Service, Characteristic;
-let devices = [];
 
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
@@ -38,7 +37,7 @@ function MiAirPurifier(log, config) {
         [150, Characteristic.AirQuality.INFERIOR],
         [100, Characteristic.AirQuality.FAIR],
         [50, Characteristic.AirQuality.GOOD],
-        [0, Characteristic.AirQuality.EXCELLENT],
+        [0, Characteristic.AirQuality.EXCELLENT]
     ];
 
     this.services = [];
@@ -76,6 +75,14 @@ function MiAirPurifier(log, config) {
         .getCharacteristic(Characteristic.RotationSpeed)
         .on('get', this.getRotationSpeed.bind(this))
         .on('set', this.setRotationSpeed.bind(this));
+
+    this.service
+        .getCharacteristic(Characteristic.FilterLifeLevel)
+        .on('get', this.getFilterState.bind(this));
+
+    this.service
+        .getCharacteristic(Characteristic.FilterChangeIndication)
+        .on('get', this.getFilterChangeState.bind(this));
 
     this.serviceInfo = new Service.AccessoryInformation();
 
@@ -149,17 +156,17 @@ function MiAirPurifier(log, config) {
 
 MiAirPurifier.prototype = {
     discover: function() {
-        var log = this.log;
         var that = this;
+        var log = that.log;
 
         miio.device({
-                address: this.ip,
-                token: this.token
+                address: that.ip,
+                token: that.token
             })
             .then(device => {
                 if (device.matches('type:air-purifier')) {
                     that.device = device;
-                    console.log('Discovered Mi Air Purifier (%s) at %s', device.miioModel, this.ip);
+                    console.log('Discovered Mi Air Purifier (%s) at %s', device.miioModel, that.ip);
 
                     log.debug('Model       : ' + device.miioModel);
                     log.debug('Power       : ' + device.property('power'));
@@ -183,7 +190,7 @@ MiAirPurifier.prototype = {
 
                     // Listen to temperature change event
                     if (that.showTemperature) {
-                        device.on('temperatureChanged', value => that.updateTemperature(parseFloat(value)));
+                        device.on('temperature', value => that.updateTemperature(parseFloat(value)));
                     }
 
                     // Listen to humidity change event
@@ -364,6 +371,24 @@ MiAirPurifier.prototype = {
         this.device.setFavoriteLevel(level)
             .then(mode => callback(null))
             .catch(err => callback(err));
+    },
+
+    getFilterState: function(callback) {
+        if(!this.device) {
+            callback(new Error('No Air Purifier is discovered.'));
+            return;
+        }
+
+        callback(null, this.device.property("filterLifeRemaining"));
+    },
+
+    getFilterChangeState: function(callback) {
+        if(!this.device) {
+            callback(new Error('No Air Purifier is discovered.'));
+            return;
+        }
+
+        callback(null, (this.device.property("filterLifeRemaining") < 5) ? Characteristic.FilterChangeIndication.CHANGE_FILTER : Characteristic.FilterChangeIndication.FILTER_OK);
     },
 
     getAirQuality: function(callback) {
