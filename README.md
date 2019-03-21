@@ -38,25 +38,25 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 
 1. Install required packages.
 
-   ```
-   npm install -g homebridge-xiaomi-purifier miio
-   ```
+	```
+	npm install -g homebridge-xiaomi-purifier miio
+	```
 
 2. Make sure your Homebridge server is same network with your air purifier, then run following command to discover the token.
 
-   ```
-   miio discover --sync
-   ```
+	```
+	miio discover --sync
+	```
 
 3. You may need to wait few minutes until you get the response similar to below:
 
-   ```
-   Device ID: 49466088
-   Model info: Unknown
-   Address: 192.168.1.8
-   Token: 6f7a65786550386c700a6b526666744d via auto-token
-   Support: Unknown
-   ```
+	```
+	Device ID: 49466088
+	Model info: Unknown
+	Address: 192.168.1.8
+	Token: 6f7a65786550386c700a6b526666744d via auto-token
+	Support: Unknown
+	```
 
 4. Record down the `Address` and `Token` values as we need it in our configuration file later.
 
@@ -64,40 +64,40 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 
 6. Then run the command again.
 
-   ```
-   miio discover --sync
-   ```
+	```
+	miio discover --sync
+	```
 
 7. Add following accessory to the `config.json`.
 
-   ```
-     "accessories": [
-       {
-         "accessory": "MiAirPurifier",
-         "name": "Bed Room Air Purifier",
-         "ip": "ADDRESS_OF_THE_AIR_PURIFIER",
-         "token": "TOKEN_FROM_STEP_3",
-         "showTemperature": true,
-         "showHumidity": true,
-         "showAirQuality": true,
-         "showLED": true,
-         "showBuzzer": true
-       },
-       {
-         "accessory": "MiAirPurifier",
-         "name": "Living Room Air Purifier",
-         "ip": "ADDRESS_OF_THE_AIR_PURIFIER",
-         "token": "TOKEN_FROM_STEP_3",
-         "showTemperature": true,
-         "showHumidity": true,
-         "showAirQuality": true,
-         "showLED": true,
-         "showBuzzer": true
-       }
-     ]
-   ```
+	```
+		"accessories": [
+		{
+			"accessory": "MiAirPurifier",
+			"name": "Bed Room Air Purifier",
+			"ip": "ADDRESS_OF_THE_AIR_PURIFIER",
+			"token": "TOKEN_FROM_STEP_3",
+			"showTemperature": true,
+			"showHumidity": true,
+			"showAirQuality": true,
+			"showLED": true,
+			"showBuzzer": true
+		},
+		{
+			"accessory": "MiAirPurifier",
+			"name": "Living Room Air Purifier",
+			"ip": "ADDRESS_OF_THE_AIR_PURIFIER",
+			"token": "TOKEN_FROM_STEP_3",
+			"showTemperature": true,
+			"showHumidity": true,
+			"showAirQuality": true,
+			"showLED": true,
+			"showBuzzer": true
+		}
+		]
+	```
 
-   **Notes:** Set value for `showTemperature`, `showHumidity`, `showAirQuality`, `showLED`, `showBuzzer` to **true** or **false** to show or hide these sensors in Home app.
+	**Notes:** Set value for `showTemperature`, `showHumidity`, `showAirQuality`, `showLED`, `showBuzzer` to **true** or **false** to show or hide these sensors in Home app.
 
 8. Restart Homebridge, and your Mi air purifier will be added to Home app.
 
@@ -106,6 +106,3 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 ### License
 
 See the [LICENSE](https://github.com/seikan/homebridge-mi-air-purifier/blob/master/LICENSE.md) file for license rights and limitations (MIT).
-
-
-
