@@ -72,32 +72,32 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 
 	```
 		"accessories": [
-		{
-			"accessory": "MiAirPurifier",
-			"name": "Bed Room Air Purifier",
-			"ip": "ADDRESS_OF_THE_AIR_PURIFIER",
-			"token": "TOKEN_FROM_STEP_3",
-			"showTemperature": true,
-			"showHumidity": true,
-			"showAirQuality": true,
-			"showLED": true,
-			"showBuzzer": true
-		},
-		{
-			"accessory": "MiAirPurifier",
-			"name": "Living Room Air Purifier",
-			"ip": "ADDRESS_OF_THE_AIR_PURIFIER",
-			"token": "TOKEN_FROM_STEP_3",
-			"showTemperature": true,
-			"showHumidity": true,
-			"showAirQuality": true,
-			"showLED": true,
-			"showBuzzer": true
-		}
+			{
+				"accessory": "MiAirPurifier",
+				"name": "Bed Room Air Purifier",
+				"ip": "ADDRESS_OF_THE_AIR_PURIFIER",
+				"token": "TOKEN_FROM_STEP_3",
+				"showTemperature": true,
+				"showHumidity": true,
+				"showAirQuality": true,
+				"enableLED": true,
+				"enableBuzzer": true
+			},
+			{
+				"accessory": "MiAirPurifier",
+				"name": "Living Room Air Purifier",
+				"ip": "ADDRESS_OF_THE_AIR_PURIFIER",
+				"token": "TOKEN_FROM_STEP_3",
+				"showTemperature": true,
+				"showHumidity": true,
+				"showAirQuality": true,
+				"enableLED": true,
+				"enableBuzzer": true
+			}
 		]
 	```
 
-	**Notes:** Set value for `showTemperature`, `showHumidity`, `showAirQuality`, `showLED`, `showBuzzer` to **true** or **false** to show or hide these sensors in Home app.
+	**Notes:** Set value for `showTemperature`, `showHumidity`, `showAirQuality`, `enableLED`, `enableBuzzer` to **true** or **false** to show or hide these sensors in Home app.
 
 8. Restart Homebridge, and your Mi air purifier will be added to Home app.
 

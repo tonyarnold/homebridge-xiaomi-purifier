@@ -15,8 +15,8 @@
 			"showTemperature": true,
 			"showHumidity": true,
 			"showAirQuality": true,
-			"showLED": true,
-			"showBuzzer": true
+			"enableLED": true,
+			"enableBuzzer": true
 		}
 	]
 }

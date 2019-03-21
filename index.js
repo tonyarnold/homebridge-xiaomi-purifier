@@ -23,8 +23,8 @@ function MiAirPurifier(log, config) {
 	this.showAirQuality = config.showAirQuality || false;
 	this.showTemperature = config.showTemperature || false;
 	this.showHumidity = config.showHumidity || false;
-	this.showLED = config.showLED || false;
-	this.showBuzzer = config.showBuzzer || false;
+	this.enableLED = config.enableLED || false;
+	this.enableBuzzer = config.enableBuzzer || false;
 	this.device = undefined;
 	this.mode = undefined;
 	this.temperature = undefined;
@@ -128,7 +128,7 @@ function MiAirPurifier(log, config) {
 		this.services.push(this.humiditySensorService);
 	}
 
-	if (this.showLED) {
+	if (this.enableLED) {
 		this.lightBulbService = new Service.Lightbulb(this.name + ' LED');
 
 		this.lightBulbService
@@ -139,7 +139,7 @@ function MiAirPurifier(log, config) {
 		this.services.push(this.lightBulbService);
 	}
 
-	if (this.showBuzzer) {
+	if (this.enableBuzzer) {
 		this.switchService = new Service.Switch(this.name + ' Buzzer');
 
 		this.switchService
