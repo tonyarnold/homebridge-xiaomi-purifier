@@ -162,6 +162,13 @@ MiAirPurifier.prototype = {
 				token: that.token
 			})
 			.then(device => {
+				/*
+				MiioDevice {
+					model=zhimi.airpurifier.v6,
+					types=miio:air-purifier, sensor, miio, air-purifier,
+					capabilities=miio:buzzer, miio:led-brightness, miio:switchable-led, pm2.5, relative-humidity, temperature, switchable-mode, mode, switchable-power, restorable-state, power, state
+				}
+				*/
 				if (device.matches('type:air-purifier')) {
 					that.device = device;
 
