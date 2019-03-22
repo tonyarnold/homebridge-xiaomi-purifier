@@ -190,6 +190,14 @@ MiAirPurifier.prototype = {
 
 					// Listen to temperature change event
 					if (that.showTemperature) {
+						// Read the temperature
+						device.temperature()
+							.then(result => {
+								that.updateTemperature(result.celsius);
+							})
+							.catch(error => {
+								logger.debug(error);
+							});
 						device.on('temperature', value => {
 							that.updateTemperature(parseFloat(value));
 						});
@@ -197,6 +205,14 @@ MiAirPurifier.prototype = {
 
 					// Listen to humidity change event
 					if (that.showHumidity) {
+						// Read the relative humidity
+						device.relativeHumidity()
+							.then(result => {
+								that.updateHumidity(result);
+							})
+							.catch(error => {
+								logger.debug(error);
+							});
 						device.on('relativeHumidityChanged', value => {
 							that.updateHumidity(value);
 						});
