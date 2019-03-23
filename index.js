@@ -191,9 +191,9 @@ MiAirPurifier.prototype = {
 						});
 					// Listen to mode change event
 					device.on('modeChanged', mode => {
-						that.updateActiveState(mode);
+//						that.updateActiveState(mode);
 						that.updateTargetAirPurifierState(mode);
-						that.updateCurrentAirPurifierState(mode);
+//						that.updateCurrentAirPurifierState(mode);
 					});
 
 					// Listen to air quality change event
@@ -251,13 +251,15 @@ MiAirPurifier.prototype = {
 			callback(new Error('No Air Purifier is discovered.'));
 			return;
 		}
-
-		const state = (this.mode != 'idle') ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE;
-
-		logger.debug('getActiveState: Mode -> %s', this.mode);
-		logger.debug('getActiveState: State -> %s', state);
-
-		callback(null, state);
+		
+		this.device.power()
+				.then(isOn => {
+					logger.debug('getActiveState: State -> %s', isOn);
+					callback(null, isOn);
+				})
+				.catch(error => {
+					logger.debug(error)
+				});
 	},
 
 	setActiveState: function (state, callback) {
@@ -292,13 +294,15 @@ MiAirPurifier.prototype = {
 			callback(new Error('No Air Purifier is discovered.'));
 			return;
 		}
-
-		const state = (this.mode == 'idle') ? Characteristic.CurrentAirPurifierState.INACTIVE : Characteristic.CurrentAirPurifierState.PURIFYING_AIR;
-
-		logger.debug('getCurrentAirPurifierState: Mode -> %s', this.mode);
-		logger.debug('getCurrentAirPurifierState: State -> %s', state);
-
-		callback(null, state);
+		
+		this.device.power()
+				.then(isOn => {
+					logger.debug('getCurrentAirPurifierState: State -> %s', isOn);
+					callback(null, isOn);
+				})
+				.catch(error => {
+					logger.debug(error)
+				});
 	},
 
 	updateCurrentAirPurifierState: function (mode) {
