@@ -183,9 +183,9 @@ MiAirPurifier.prototype = {
 
 					// Listen to mode change event
 					device.on('modeChanged', mode => {
-						that.updateActiveState(mode);
+						//that.updateActiveState(mode);
 						that.updateTargetAirPurifierState(mode);
-						that.updateCurrentAirPurifierState(mode);
+						//that.updateCurrentAirPurifierState(mode);
 					});
 
 					// Listen to air quality change event
@@ -244,12 +244,14 @@ MiAirPurifier.prototype = {
 			return;
 		}
 
-		const state = (this.mode != 'idle') ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE;
-
-		logger.debug('getActiveState: Mode -> %s', this.mode);
-		logger.debug('getActiveState: State -> %s', state);
-
-		callback(null, state);
+		this.device.power()
+			.then(state => {
+				logger.debug('getActiveState: State -> %s', state);
+				callback(null, state);
+			})
+			.catch(error => {
+				callback(error);
+			});
 	},
 
 	setActiveState: function (state, callback) {
@@ -258,22 +260,31 @@ MiAirPurifier.prototype = {
 			return;
 		}
 
+		const that = this;
+
 		logger.debug('setActiveState: %s', state);
 
 		this.device.setPower(state)
-			.then(state => {
-				callback(null);
+			.then(isOn => {
+				that.updateActiveState(that.mode);
+				that.updateCurrentAirPurifierState(this.mode);
 			})
 			.catch(error => {
 				callback(error);
 			});
 	},
 
-	updateActiveState: function (mode) {
-		const state = (mode != 'idle') ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE;
+	updateActiveState: async function (mode) {
 		this.mode = mode;
 
-		logger.debug('updateActiveState: Mode -> %s', mode);
+		const isOn = await this.device.power();
+		let state = isOn ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE;
+
+		if (isOn) {
+			logger.debug('updateActiveState: Mode ->  %s', mode);
+			state = (mode != 'idle') ? Characteristic.Active.ACTIVE : Characteristic.Active.INACTIVE;
+		}
+
 		logger.debug('updateActiveState: State -> %s', state);
 
 		this.service.getCharacteristic(Characteristic.Active).updateValue(state);
@@ -285,20 +296,28 @@ MiAirPurifier.prototype = {
 			return;
 		}
 
-		const state = (this.mode == 'idle') ? Characteristic.CurrentAirPurifierState.INACTIVE : Characteristic.CurrentAirPurifierState.PURIFYING_AIR;
-
-		logger.debug('getCurrentAirPurifierState: Mode -> %s', this.mode);
-		logger.debug('getCurrentAirPurifierState: State -> %s', state);
-
-		callback(null, state);
+		this.device.power()
+			.then(isOn => {
+				logger.debug('getCurrentAirPurifierState: State -> %s', (isOn ? Characteristic.CurrentAirPurifierState.PURIFYING_AIR : Characteristic.CurrentAirPurifierState.INACTIVE));
+				callback(null, isOn ? Characteristic.CurrentAirPurifierState.PURIFYING_AIR : Characteristic.CurrentAirPurifierState.INACTIVE);
+			})
+			.catch(error => {
+				callback(error);
+			});
 	},
 
-	updateCurrentAirPurifierState: function (mode) {
-		const state = (mode == 'idle') ? Characteristic.CurrentAirPurifierState.INACTIVE : Characteristic.CurrentAirPurifierState.PURIFYING_AIR;
+	updateCurrentAirPurifierState: async function (mode) {
 		this.mode = mode;
 
-		logger.debug('updateCurrentAirPurifierState: Mode ->  %s', mode);
-		logger.debug('updateCurrentAirPurifierState: State ->  %s', state);
+		const isOn = await this.device.power();
+		let state = isOn ? Characteristic.CurrentAirPurifierState.PURIFYING_AIR : Characteristic.CurrentAirPurifierState.INACTIVE;
+
+		if (isOn) {
+			logger.debug('updateCurrentAirPurifierState: Mode ->  %s', mode);
+			state = (mode == 'idle') ? Characteristic.CurrentAirPurifierState.INACTIVE : Characteristic.CurrentAirPurifierState.PURIFYING_AIR;
+		}
+
+		logger.debug('getCurrentAirPurifierState: State -> %s', state);
 
 		this.service.getCharacteristic(Characteristic.CurrentAirPurifierState).updateValue(state);
 	},
