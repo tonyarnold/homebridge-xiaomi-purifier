@@ -181,6 +181,14 @@ MiAirPurifier.prototype = {
 					logger.debug('Air Quality : ' + device.property('aqi'));
 					logger.debug('LED         : ' + device.property('led'));
 
+					// Get if the air purifier is on
+					device.power()
+						.then(isOn => {
+							that.setActiveState(isOn, that);
+						})
+						.catch(error => {
+							logger.debug(error);
+						});
 					// Listen to mode change event
 					device.on('modeChanged', mode => {
 						that.updateActiveState(mode);
