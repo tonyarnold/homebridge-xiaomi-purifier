@@ -31,11 +31,12 @@ function MiAirPurifier(log, config) {
 	this.humidity = undefined;
 	this.aqi = undefined;
 
+	//Korea PM 2.5 standard value
 	this.levels = [
-		[200, Characteristic.AirQuality.POOR],
-		[150, Characteristic.AirQuality.INFERIOR],
-		[100, Characteristic.AirQuality.FAIR],
-		[50, Characteristic.AirQuality.GOOD],
+		[101, Characteristic.AirQuality.POOR],
+		[76, Characteristic.AirQuality.INFERIOR],
+		[36, Characteristic.AirQuality.FAIR],
+		[16, Characteristic.AirQuality.GOOD],
 		[0, Characteristic.AirQuality.EXCELLENT]
 	];
 
@@ -199,14 +200,14 @@ MiAirPurifier.prototype = {
 					if (that.showTemperature) {
 						// Read the temperature
 						device.temperature()
-							.then(result => {
-								that.updateTemperature(result.celsius);
+							.then(temperature => {
+								that.updateTemperature(temperature.celsius);
 							})
 							.catch(error => {
 								logger.debug(error);
 							});
-						device.on('temperature', value => {
-							that.updateTemperature(parseFloat(value));
+						device.on('temperature', temperature => {
+							that.updateTemperature(temperature.celsius);
 						});
 					}
 
@@ -491,6 +492,8 @@ MiAirPurifier.prototype = {
 
 		logger.debug('updateAirQuality: %s', value);
 
+		this.updatePM25(value);
+		
 		for (var item of this.levels) {
 			if (value >= item[0]) {
 				this.airQualitySensorService.getCharacteristic(Characteristic.AirQuality).updateValue(item[1]);
@@ -508,6 +511,17 @@ MiAirPurifier.prototype = {
 		logger.debug('getPM25: %s', this.aqi);
 
 		callback(null, this.aqi);
+	},
+
+	updatePM25: function (value) {
+		if (!this.device) {
+			callback(new Error('No Air Purifier is discovered.'));
+			return;
+		}
+
+		logger.debug('updatePM25: %s', value);
+
+		this.airQualitySensorService.getCharacteristic(Characteristic.PM2_5Density).updateValue(value);
 	},
 
 	getTemperature: function (callback) {
