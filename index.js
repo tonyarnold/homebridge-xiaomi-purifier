@@ -36,7 +36,7 @@ function MiAirPurifier(log, config) {
 		[76, Characteristic.AirQuality.POOR],
 		[36, Characteristic.AirQuality.INFERIOR],
 		[16, Characteristic.AirQuality.FAIR],
-		[8, Characteristic.AirQuality.GOOD],
+		[6, Characteristic.AirQuality.GOOD],
 		[0, Characteristic.AirQuality.EXCELLENT]
 	];
 
