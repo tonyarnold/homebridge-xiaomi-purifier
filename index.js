@@ -206,7 +206,7 @@ MiAirPurifier.prototype = {
 							.catch(error => {
 								logger.debug(error);
 							});
-						device.on('temperature', temperature => {
+						device.on('temperatureChanged', temperature => {
 							that.updateTemperature(temperature.celsius);
 						});
 					}
