@@ -33,10 +33,10 @@ function MiAirPurifier(log, config) {
 
 	//Korea PM 2.5 standard value
 	this.levels = [
-		[101, Characteristic.AirQuality.POOR],
-		[76, Characteristic.AirQuality.INFERIOR],
-		[36, Characteristic.AirQuality.FAIR],
-		[16, Characteristic.AirQuality.GOOD],
+		[76, Characteristic.AirQuality.POOR],
+		[36, Characteristic.AirQuality.INFERIOR],
+		[16, Characteristic.AirQuality.FAIR],
+		[8, Characteristic.AirQuality.GOOD],
 		[0, Characteristic.AirQuality.EXCELLENT]
 	];
 
