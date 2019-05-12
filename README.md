@@ -4,7 +4,7 @@
 
 This project is forked from [homebridge-mi-air-purifier](https://github.com/seikan/homebridge-mi-air-purifier.git).
 
-This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarina/homebridge). This plugin will add the air purifier and **Air Quality Sensor** to your Home app. This version is working with iOS 11 to add the device as air purifier in Home app.
+This is the Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarina/homebridge). This plugin will add the air purifier and **Air Quality Sensor** to your Home app. This version is working with iOS 11 to add the device as air purifier in Home app.
 
 ![mi-air-purifier](https://cloud.githubusercontent.com/assets/73107/26249685/1d0ae78c-3cda-11e7-8b64-71e8d4323a3e.jpg)
 
@@ -12,43 +12,33 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 
 ### Features
 
-* Switch on / off.
-
-* Switch auto / manual mode.
-
-* Change fan rotation speed.
-
-* Switch child lock on / off.
-
-* Switch LED light on / off.
-
-* Switch buzzer sound on / off.
-
-* Display temperature.
-
-* Display humidity.
-
-* Display air quality.
-
-* Display filter state.
-
+ - Switch the unit on and off.
+ - Switch between automatic and manual mode.
+ - Change the fan speed.
+ - Enable or disable the child lock.
+ - Enable or disable the LED light.
+ - Enable or disable the notification soun.
+ - Display the current temperature.
+ - Display the current humidity.
+ - Display the current air quality.
+ - Display the filter state.
 
 
 ### Installation
 
-1. Install required packages.
+1. Install the required packages.
 
 	```
 	npm install -g homebridge-xiaomi-purifier miio
 	```
 
-2. Make sure your Homebridge server is same network with your air purifier, then run following command to discover the token.
+2. Make sure that your Homebridge server is on the same network as your air purifier, then run following command to discover the token.
 
 	```
 	miio discover --sync
 	```
 
-3. You may need to wait few minutes until you get the response similar to below:
+3. You may need to wait for a few minutes until before you will receive a response similar to:
 
 	```
 	Device ID: 49466088
@@ -58,19 +48,13 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 	Support: Unknown
 	```
 
-4. Record down the `Address` and `Token` values as we need it in our configuration file later.
+4. Record the `Address` and `Token` values - you'll need these for your configuration file.
 
-5. If you are getting `??????????????` for your token value, please reset your device and connect your Homebridge server directly to the access point advertised by the device.
+5. If you are getting `??????????????` as your token value, please reset your device and connect your Homebridge server directly to the access point advertised by the device. Once this is done, go back to Step 2 and try again.
 
-6. Then run the command again.
+6. Add following accessory to the `config.json`.
 
-	```
-	miio discover --sync
-	```
-
-7. Add following accessory to the `config.json`.
-
-	```
+	```json
 		"accessories": [
 			{
 				"accessory": "MiAirPurifier",
@@ -81,7 +65,7 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 				"showHumidity": true,
 				"showAirQuality": true,
 				"enableLED": true,
-				"enableBuzzer": true
+				"enableNotificationSound": true
 			},
 			{
 				"accessory": "MiAirPurifier",
@@ -92,14 +76,14 @@ This is Xiaomi Mi Air Purifier plugin for [Homebridge](https://github.com/nfarin
 				"showHumidity": true,
 				"showAirQuality": true,
 				"enableLED": true,
-				"enableBuzzer": true
+				"enableNotificationSound": true
 			}
 		]
 	```
 
-	**Notes:** Set value for `showTemperature`, `showHumidity`, `showAirQuality`, `enableLED`, `enableBuzzer` to **true** or **false** to show or hide these sensors in Home app.
+	**Notes:** Set the values for `showTemperature`, `showHumidity`, `showAirQuality`, `enableLED`, `enableNotificationSound` to **true** or **false** to show or hide these sensors in Home.app.
 
-8. Restart Homebridge, and your Mi air purifier will be added to Home app.
+8. Restart Homebridge, and your Mi Air Purifier will be added to Home.app.
 
 
 

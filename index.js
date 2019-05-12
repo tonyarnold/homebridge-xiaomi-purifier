@@ -10,7 +10,7 @@ module.exports = function (homebridge) {
 	Service = homebridge.hap.Service;
 	Characteristic = homebridge.hap.Characteristic;
 
-	homebridge.registerAccessory('homebridge-xiaomi-purifier', 'MiAirPurifier', MiAirPurifier);
+	homebridge.registerAccessory('homebridge-xiaomi-purifier', 'Mi Air Purifier', MiAirPurifier);
 }
 
 function MiAirPurifier(log, config) {
@@ -24,7 +24,7 @@ function MiAirPurifier(log, config) {
 	this.showTemperature = config.showTemperature || false;
 	this.showHumidity = config.showHumidity || false;
 	this.enableLED = config.enableLED || false;
-	this.enableBuzzer = config.enableBuzzer || false;
+	this.enableNotificationSound = config.enableNotificationSound || false;
 	this.device = undefined;
 	this.mode = undefined;
 	this.temperature = undefined;
@@ -41,11 +41,11 @@ function MiAirPurifier(log, config) {
 	];
 
 	if (!this.ip) {
-		throw new Error('Your must provide IP address of the Air Purifier.');
+		throw new Error('You must provide the current IP address of the Air Purifier.');
 	}
 
 	if (!this.token) {
-		throw new Error('Your must provide token of the Air Purifier.');
+		throw new Error('You must provide the API token for the Air Purifier.');
 	}
 
 	this.service = new Service.AirPurifier(this.name);
@@ -140,13 +140,13 @@ function MiAirPurifier(log, config) {
 		this.services.push(this.lightBulbService);
 	}
 
-	if (this.enableBuzzer) {
-		this.switchService = new Service.Switch(this.name + ' Buzzer');
+	if (this.enableNotificationSound) {
+		this.switchService = new Service.Switch(this.name + ' Notification Sound');
 
 		this.switchService
 			.getCharacteristic(Characteristic.On)
-			.on('get', this.getBuzzer.bind(this))
-			.on('set', this.setBuzzer.bind(this));
+			.on('get', this.getNotificationSound.bind(this))
+			.on('set', this.setNotificationSound.bind(this));
 
 		this.services.push(this.switchService);
 	}
@@ -226,7 +226,7 @@ MiAirPurifier.prototype = {
 						});
 					}
 				} else {
-					logger.debug('Device discovered at %s is not Mi Air Purifier', this.ip);
+					logger.debug('Device discovered at %s is not a Mi Air Purifier', this.ip);
 				}
 			})
 			.catch(error => {
@@ -369,7 +369,7 @@ MiAirPurifier.prototype = {
 
 	getLockPhysicalControls: async function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -378,7 +378,7 @@ MiAirPurifier.prototype = {
 				const state = (result[0] === 'on') ? Characteristic.LockPhysicalControls.CONTROL_LOCK_ENABLED : Characteristic.LockPhysicalControls.CONTROL_LOCK_DISABLED;
 
 				logger.debug('getLockPhysicalControls: %s', state);
-				
+
 				callback(null, state);
 			})
 			.catch(error => {
@@ -388,7 +388,7 @@ MiAirPurifier.prototype = {
 
 	setLockPhysicalControls: async function (state, callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -405,7 +405,7 @@ MiAirPurifier.prototype = {
 
 	getRotationSpeed: function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -422,7 +422,7 @@ MiAirPurifier.prototype = {
 
 	setRotationSpeed: function (speed, callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -451,7 +451,7 @@ MiAirPurifier.prototype = {
 
 	getFilterState: function (callback) {
 		if(!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -460,7 +460,7 @@ MiAirPurifier.prototype = {
 
 	getFilterChangeState: function (callback) {
 		if(!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -469,7 +469,7 @@ MiAirPurifier.prototype = {
 
 	getAirQuality: function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -493,7 +493,7 @@ MiAirPurifier.prototype = {
 		logger.debug('updateAirQuality: %s', value);
 
 		this.updatePM25(value);
-		
+
 		for (var item of this.levels) {
 			if (value >= item[0]) {
 				this.airQualitySensorService.getCharacteristic(Characteristic.AirQuality).updateValue(item[1]);
@@ -504,7 +504,7 @@ MiAirPurifier.prototype = {
 
 	getPM25: function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -515,7 +515,7 @@ MiAirPurifier.prototype = {
 
 	updatePM25: function (value) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -526,7 +526,7 @@ MiAirPurifier.prototype = {
 
 	getTemperature: function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -549,7 +549,7 @@ MiAirPurifier.prototype = {
 
 	getHumidity: function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -572,7 +572,7 @@ MiAirPurifier.prototype = {
 
 	getLED: async function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -585,7 +585,7 @@ MiAirPurifier.prototype = {
 
 	setLED: async function (state, callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
@@ -600,26 +600,26 @@ MiAirPurifier.prototype = {
 			});
 	},
 
-	getBuzzer: async function (callback) {
+	getNotificationSound: async function (callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
 		const state = await this.device.buzzer();
-		
-		logger.debug('getBuzzer: %s', state);
-		
+
+		logger.debug('getNotificationSound: %s', state);
+
 		callback(null, state);
 	},
 
-	setBuzzer: async function (state, callback) {
+	setNotificationSound: async function (state, callback) {
 		if (!this.device) {
-			callback(new Error('No Air Purifier is discovered.'));
+			callback(new Error('No Air Purifier found.'));
 			return;
 		}
 
-		logger.debug('setBuzzer: %s', state);
+		logger.debug('setNotificationSound: %s', state);
 
 		await this.device.buzzer(state)
 			.then(state => {

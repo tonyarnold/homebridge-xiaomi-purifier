@@ -16,7 +16,7 @@
 			"showHumidity": true,
 			"showAirQuality": true,
 			"enableLED": true,
-			"enableBuzzer": true
+			"enableNotificationSound": true
 		}
 	]
 }
